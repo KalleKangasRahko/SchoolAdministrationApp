@@ -15,7 +15,16 @@ class User {
     // Get, by id, a user out of all the different users in the db
     static async getById(userId) {
         return new Promise((resolve, reject) => {
-            const q = `SELECT * FROM users WHERE id='${userId}'`;
+            //const q = `SELECT * FROM users WHERE id='${userId}'`;
+            // This monster of a query allows us to get both the children of a parent and parents of a child with a single call
+            const q = `SELECT u.id, u.role, u.firstname, u.lastname, u.email, u.address, u.phonenum, u.grade AS ownGrade,
+                        CONCAT(c.firstname, ' ', c.lastname) AS child, c.grade, 
+                        CONCAT(p.firstname, ' ', p.lastname) AS parent
+                        FROM users u left JOIN parents_children pc1 ON u.id = pc1.parent 
+                        LEFT JOIN users c ON c.id = pc1.child 
+                        LEFT JOIN parents_children pc2 ON u.id = pc2.child 
+                        LEFT JOIN users p ON p.id = pc2.parent
+                        WHERE u.id='${userId}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {

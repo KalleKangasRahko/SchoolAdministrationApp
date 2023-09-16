@@ -19,6 +19,7 @@ module.exports = ({ req }) => {
     }
 
     return template({
+        req,
         content: `
         <div>
             You are logged in as ${user.firstname} ${user.lastname}. Continue to ${dashboard} or <a href="/logout">log out</a>.
