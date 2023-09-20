@@ -83,6 +83,34 @@ class Student extends User {
         });
     }
 
+    static async getStudentsForGuardian() {
+        return new Promise((resolve, reject) => {
+            // Another monster-query, which gets us all the students and the ids of their guardians
+            const q = `SELECT u.id, CONCAT(u.firstname, ' ', u.lastname) AS name, u.grade, pc2.parent AS parentId
+            FROM users u left JOIN parents_children pc1 ON u.id = pc1.parent 
+            LEFT JOIN users c ON c.id = pc1.child 
+            LEFT JOIN parents_children pc2 ON u.id = pc2.child 
+            LEFT JOIN users p ON p.id = pc2.parent
+            WHERE u.role = 3`
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
+    }
+
     static async getByGrade(grade) {
         console.log('Searching for a student by grade...');
         return new Promise((resolve, reject) => {

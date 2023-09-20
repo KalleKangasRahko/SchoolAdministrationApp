@@ -1,8 +1,6 @@
-const { add } = require('nodemon/lib/rules');
 const template = require('../template');
 
 module.exports = ({ req, user }) => {   
-    console.log('heres the user:');
     const userArray = user;
     user = user[0];
     let addressAndPhone;
@@ -24,7 +22,7 @@ module.exports = ({ req, user }) => {
     // If the user is a guardian, show their children
     if (user.role === 2) {
         const items = userArray.map(item => {
-            return `<li>${item.child}, grade ${item.grade}</li>`;
+            return `<li><a href="/profiles/${item.childId}">${item.child}</a>, grade ${item.grade}</li>`;
         }).join('');
 
         children = `<h4>Children</h4>
@@ -38,7 +36,7 @@ module.exports = ({ req, user }) => {
     if (user.role === 3) {
         grade = `<li>Grade ${user.ownGrade}</li>`
         const items = userArray.map(item => {
-            return `<li>${item.parent}</li>`
+            return `<li><a href="/profiles/${item.parentId}">${item.parent}</a></li>`
         }).join('');
 
         guardians = `<h4>Guardians</h4>

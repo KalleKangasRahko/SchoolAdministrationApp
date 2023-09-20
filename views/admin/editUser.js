@@ -32,6 +32,13 @@ module.exports = ({ req, user }) => {
         `
     }
 
+    // Button for guardians for adding or removing children
+    let childrenButton = '';
+    if (user.role === 2) {
+        childrenButton = `<a href="/admin/edit/children/${user.id}">
+            <button>Add or remove children</button></a>`;
+    }
+
     // Grades-selector for student-users
     let grades = '';
     if (user.role === 3) {
@@ -65,7 +72,7 @@ module.exports = ({ req, user }) => {
             <label>E-mail</label>
                 <input name="email" value="${user.email}"/>
             <label>Password</label>
-                <input name="password" value="${user.password}"/>
+                <input name="password"/>
             <label>Role</label>
                 <select name="role">
                     <option value="${user.role}" selected>${role}</option>
@@ -75,6 +82,7 @@ module.exports = ({ req, user }) => {
             </br>
             <button type="submit">Submit</button>
         </form>
+        ${childrenButton}
         <a href="/admin">
             <button>Cancel</button>
         </a>

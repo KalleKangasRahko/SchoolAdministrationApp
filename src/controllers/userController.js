@@ -4,7 +4,6 @@ const { Guardian } = require('../models/guardian');
 const { Student } = require('../models/student');
 const { cryptPassword } = require('../../utils');
 const crypto = require('crypto');
-const util = require('util');
 
 const userController = {
     async createUser(req, res) {
@@ -199,11 +198,32 @@ const userController = {
         }
     },
 
+    async getStudentsForGuardian(req, res) {
+        try {
+            const result = await Student.getStudentsForGuardian();
+            res.json({ status: "OK", msg: "", response: result });
+
+        }
+        catch(error) {
+            res.status(500).json({ error });
+        }
+    },
+
     async getStudentsByGrade(req, res) {
         try {
             const result = await Student.getByGrade(req.params.grade);
             res.json({ status: "OK", msg: "", response: result });
 
+        }
+        catch(error) {
+            res.status(500).json({ error });
+        }
+    },
+
+    async removeChildFromGuardian(req, res) {
+        try {
+            const result = await Student.removeChild(req.params.id);
+            res.json({ status: "OK", msg: "", response: result});
         }
         catch(error) {
             res.status(500).json({ error });
