@@ -1,17 +1,17 @@
 const db = require('../db');
 
-class parentChild {
+class ParentChild {
     constructor (parent, child) {
         this.parent = parent;
         this.child = child;
     }
 
     // Connect a guardian and a student
-    static async create(parentId, childId) {
+    async create() {
         return new Promise((resolve, reject) => {
             const q = 'INSERT INTO parents_children (parent, child) VALUES (?, ?)';
             try {
-                db.query(q, [parentId, childId],
+                db.query(q, [this.parent, this.child],
                     (error, result) => {
                         if (error) {
                             console.log(error);
@@ -31,9 +31,9 @@ class parentChild {
     }
 
     // Remove a row from the table, though not the users themselves
-    static async remove(parentId, childId) {
+    async remove() {
         return new Promise((resolve, reject) => {
-            const q = `DELETE FROM parents_children WHERE parent='${parentId}' AND child='${childId}'`;
+            const q = `DELETE FROM parents_children WHERE parent='${this.parent}' AND child='${this.child}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {
@@ -54,4 +54,4 @@ class parentChild {
     }
 }
 
-module.exports = { parentChild };
+module.exports = { ParentChild };

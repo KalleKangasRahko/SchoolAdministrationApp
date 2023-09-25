@@ -8,11 +8,11 @@ class Admin extends User {
     }
 
     // Tested and works!
-    static async create(userData) {
+    async create() {
         return new Promise((resolve, reject) => {
             const q = 'INSERT INTO users (ID, EMAIL, PASSWORD, ROLE) VALUES (?, ?, ?, ?)';
             try {
-                db.query(q, [userData.id, userData.email, userData.password, 0],
+                db.query(q, [this.id, this.email, this.password, 0],
                     (error, result) => {
                         if (error) {
                             console.log(error);
@@ -55,12 +55,20 @@ class Admin extends User {
     }
 
     // Tested and works!
-    static async update(userId, updatedData) {
+    async update() {
         return new Promise((resolve, reject) => {
-            console.log(updatedData);
-            const q = `UPDATE users SET email='${updatedData.email}',
-                        password='${updatedData.password}'
-                        WHERE id='${userId}'`;
+            // The password is changed only if a new one is supplied
+            // Otherwise the password simply be reset to empty and you'd have to supply the old password every time the user is edited
+            let password;
+            if (this.password !== '') {
+                password = `, password='${this.password}'`
+            }
+            else {
+                password = '';
+            }
+            const q = `UPDATE users SET email='${this.email}'
+                        ${password}
+                        WHERE id='${this.id}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {

@@ -22,7 +22,7 @@ module.exports = ({ req, errors }) => {
                 <input name="email"/>
                 ${getError(errors, 'email')}
                 <label>Password</label>
-                <input name="password"/>
+                <input name="password" type="password"/>
                 ${getError(errors, 'password')}
                 <button>Log in</button>
             </form>

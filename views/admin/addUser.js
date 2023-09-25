@@ -23,10 +23,10 @@ module.exports = ({ req, errors }) => {
                 <input name="email"/>
                 ${getError(errors, 'email')}
                 <label>Password</label>
-                <input name="password"/>
+                <input name="password" type="password"/>
                 ${getError(errors, 'password')}
                 <label>Password confirm</label>
-                <input name="passwordConfirmation"/>
+                <input name="passwordConfirmation" type="password"/>
                 ${getError(errors, 'passwordConfirmation')}
                 <select id="roleSelector" name="role">
                     <option>Choose role...</option>

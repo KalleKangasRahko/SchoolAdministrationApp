@@ -45,7 +45,7 @@ module.exports = ({ req, user }) => {
         let gradeOptions = [];
         for (let i = 1; i < 10; i++) {
             let gradeOption;
-            if (i === parseInt(user.grade)) {
+            if (i === parseInt(user.ownGrade)) {
                 gradeOption = `<option value=${i} selected>${i}</option>`
             }
             else {
@@ -72,9 +72,8 @@ module.exports = ({ req, user }) => {
             <label>E-mail</label>
                 <input name="email" value="${user.email}"/>
             <label>Password</label>
-                <input name="password"/>
-            <label>Role</label>
-                <select name="role">
+                <input name="password" type="password"/>
+                <select hidden name="role">
                     <option value="${user.role}" selected>${role}</option>
                 </select>
             ${personalInfo}

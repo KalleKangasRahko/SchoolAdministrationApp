@@ -1,10 +1,11 @@
-const { parentChild } = require('../models/parentChild');
+const { ParentChild } = require('../models/parentChild');
 
 const parentChildController = {
-    async connect(req, res) {
+    async create(req, res) {
         try {
             const { parentId, childId } = req.body;
-            const result = await parentChild.create(parentId, childId);
+            const parentChild = new ParentChild(parentId, childId);
+            const result = await parentChild.create();
             res.status(201).json({ status: "OK", msg: "Users connected", response: result });
         }
         catch (error) {
@@ -12,13 +13,11 @@ const parentChildController = {
         }
     },
 
-    async sever(req, res) {
+    async remove(req, res) {
         try {
-            console.log('hiyay!');
             const { parentId, childId } = req.body;
-            console.log(parentId);
-            console.log(childId);
-            const result = await parentChild.remove(parentId, childId);
+            const parentChild = new ParentChild(parentId, childId);
+            const result = await parentChild.remove();
             res.status(201).json({ status: "OK", msg: "Users severed", response: result });
         }
         catch (error) {

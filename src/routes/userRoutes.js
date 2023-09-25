@@ -16,11 +16,9 @@ router.get('/admins', userController.getAllAdmins);
 
 // Routes for guardians
 router.get('/guardians', userController.getAllGuardians);
-router.get('/guardians/:studentId', userController.getGuardiansByStudentId);
 
 // Routes for students
 router.get('/students', userController.getAllStudents);
-router.get('/students/guardian/:guardianId', userController.getStudentsByGuardianId);
 router.get('/students/list', userController.getStudentsForGuardian);
 router.get('/students/grade/:grade', userController.getStudentsByGrade);
 

@@ -1,14 +1,6 @@
 const template = require('../template');
 
 module.exports = ({ req, students, id }) => {
-    // TODO:
-    /*
-    Sisäkkäiset for-loopit
-        1) Otetaan id:t taulukosta yksi kerrallaan
-        2) Jos id esiintyy toisen kerran taulukossa, toistuva rivi poistetaan
-    */
-    console.log('students at first:');
-    console.log(students);
     let studentToRemove;
 
     // If we find a student whose guardian is the current user, we make a note of their id
@@ -46,5 +38,6 @@ module.exports = ({ req, students, id }) => {
                 <select name="childId">${items}</select>
                 <button type="submit">Add as a child</button>
             </form>
+            <a href="/admin/edit/children/${id}"><button>Cancel</button>
         </div>`});
 }

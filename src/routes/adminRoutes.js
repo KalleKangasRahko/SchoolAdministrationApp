@@ -116,7 +116,7 @@ router.get('/edit/children/add/:id', async (req, res) => {
 router.post('/edit/children/add/:id', async (req, res) => {
     const { parentId, childId } = req.body;
     const ids = { parentId, childId };
-    await axios.post(`http://localhost:3000/api/parentchild/connect`, ids);
+    await axios.post(`http://localhost:3000/api/parentchild/`, ids);
     res.redirect(`/admin/edit/children/${parentId}`);
 });
 

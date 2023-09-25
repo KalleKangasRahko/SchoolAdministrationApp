@@ -20,7 +20,7 @@ module.exports = ({ req, user }) => {
     }
 
     // If the user is a guardian, show their children
-    if (user.role === 2) {
+    if (user.role === 2 && user.childId !== null) {
         const items = userArray.map(item => {
             return `<li><a href="/profiles/${item.childId}">${item.child}</a>, grade ${item.grade}</li>`;
         }).join('');
@@ -29,7 +29,7 @@ module.exports = ({ req, user }) => {
                     <ul>${items}</ul>`
     }
     else {
-        children = '';
+        children = '<h4>Children</h4><h4>No children assigned, yet</h4>';
     }
 
     // If the user is a student, show their guardians

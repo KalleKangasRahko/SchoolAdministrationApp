@@ -11,12 +11,11 @@ class Student extends User {
     }
 
     // Tested and works!
-    static async create(userData) {
+    async create() {
         return new Promise((resolve, reject) => {
-            const { id, email, password, firstname, lastname, address, phonenum, grade } = userData;
             const q = 'INSERT INTO users (ID, EMAIL, PASSWORD, ROLE, FIRSTNAME, LASTNAME, ADDRESS, PHONENUM, GRADE) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)';
             try {
-                db.query(q, [id, email, password, 3, firstname, lastname, address, phonenum, grade],
+                db.query(q, [this.id, this.email, this.password, 3, this.firstname, this.lastname, this.address, this.phonenum, this.grade],
                     (error, result) => {
                         if (error) {
                             console.log(error);
@@ -39,31 +38,6 @@ class Student extends User {
     static async getAll() {
         return new Promise((resolve, reject) => {
             const q = 'SELECT * FROM users WHERE role=3';
-            try {
-                db.query(q, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        console.log(result);
-                        resolve(result);
-                    }
-                });
-            }
-            catch (error) {
-                console.log(error);
-                reject(error);
-            }
-        });
-    }
-
-    // Tested and works!
-    // Get children (students) of a certain guardian
-    static async getByGuardian(guardianId) {
-        console.log('Searching for a student by guardian...');
-        return new Promise((resolve, reject) => {
-            const q = `SELECT * FROM parents_children inner JOIN users ON parents_children.child=users.id AND parent='${guardianId}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {
@@ -135,18 +109,26 @@ class Student extends User {
     }
 
     // Tested and works!
-    static async update(userId, updatedData) {
+    async update() {
         return new Promise((resolve, reject) => {
-            console.log(updatedData);
-            const { email, password, firstname, lastname, address, phonenum, grade } = updatedData;
-            const q = `UPDATE users SET email='${email}',
-                        password='${password}',
-                        firstname='${firstname}', 
-                        lastname='${lastname}',
-                        address='${address}',
-                        phonenum='${phonenum}',
-                        grade=${grade}
-                        WHERE id='${userId}'`;
+            //const { email, password, firstname, lastname, address, phonenum, grade } = updatedData;
+            // The password is changed only if a new one is supplied
+            // Otherwise the password simply be reset to empty and you'd have to supply the old password every time the user is edited
+            let password;
+            if (this.password !== '') {
+                password = `password='${this.password}',`
+            }
+            else {
+                password = '';
+            }
+            const q = `UPDATE users SET email='${this.email}',
+                        ${password}
+                        firstname='${this.firstname}', 
+                        lastname='${this.lastname}',
+                        address='${this.address}',
+                        phonenum='${this.phonenum}',
+                        grade=${this.grade}
+                        WHERE id='${this.id}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {

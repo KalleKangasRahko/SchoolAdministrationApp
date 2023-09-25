@@ -87,9 +87,9 @@ class User {
         });
     }
 
-    static async remove(userId) {
+    async remove() {
         return new Promise((resolve, reject) => {
-            const q = `DELETE FROM users WHERE id='${userId}'`;
+            const q = `DELETE FROM users WHERE id='${this.id}'`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {
