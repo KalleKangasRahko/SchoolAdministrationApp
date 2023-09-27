@@ -1,6 +1,7 @@
 const { User } = require('../models/user');
 const { Admin } = require('../models/admin.js');
 const { Guardian } = require('../models/guardian');
+const { Teacher } = require('../models/teacher');
 const { Student } = require('../models/student');
 const { cryptPassword } = require('../../utils');
 const crypto = require('crypto');
@@ -45,7 +46,7 @@ const userController = {
                 user = new Admin(userId, email, hashed, role, firstname, lastname);
             }
             else if (role === 1) {
-                // Create a teacher
+                user = new Teacher(userId, email, hashed, role, firstname, lastname, address, phonenum, grade);
             }
             else if (role === 2) {
                 user = new Guardian(userId, email, hashed, role, firstname, lastname, address, phonenum);
@@ -119,7 +120,8 @@ const userController = {
                 //result = await Admin.update(userId, updatedData);
             }
             else if (role === 1) {
-                // update Teacher
+                user = new Teacher(userId, email, newPassword, 1, firstname, lastname, address, phonenum, grade);
+                result = await user.update();
             }
             else if (role === 2) {
                 user = new Guardian(userId, email, newPassword, 2, firstname, lastname, address, phonenum);

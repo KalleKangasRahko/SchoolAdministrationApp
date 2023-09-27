@@ -5,6 +5,7 @@ module.exports = ({ req, user }) => {
     user = user[0];
     let addressAndPhone;
     let grade;
+    let teacherInfo;
     let children;
     let guardians;
 
@@ -19,6 +20,14 @@ module.exports = ({ req, user }) => {
         addressAndPhone = '';
     }
 
+    // If the user is a teacher, show relevant info
+    if (user.role === 1 && user.ownGrade > 0) {
+        teacherInfo = `<h4>Grade ${user.ownGrade} class supervisor</h4>`;
+    }
+    else {
+        teacherInfo = '';
+    }
+
     // If the user is a guardian, show their children
     if (user.role === 2 && user.childId !== null) {
         const items = userArray.map(item => {
@@ -28,8 +37,11 @@ module.exports = ({ req, user }) => {
         children = `<h4>Children</h4>
                     <ul>${items}</ul>`
     }
-    else {
+    else if (user.role === 2){
         children = '<h4>Children</h4><h4>No children assigned, yet</h4>';
+    }
+    else {
+        children = '';
     }
 
     // If the user is a student, show their guardians
@@ -52,6 +64,7 @@ module.exports = ({ req, user }) => {
         content: `
         <div>
             <h3>${user.firstname} ${user.lastname}</h3>
+            ${teacherInfo}
             <ul>
                 ${addressAndPhone}
                 ${grade}

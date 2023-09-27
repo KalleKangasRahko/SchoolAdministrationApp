@@ -41,9 +41,9 @@ module.exports = ({ req, user }) => {
 
     // Grades-selector for student-users
     let grades = '';
-    if (user.role === 3) {
+    if (user.role === 1 || user.role === 3) {
         let gradeOptions = [];
-        for (let i = 1; i < 10; i++) {
+        for (let i = 0; i < 10; i++) {
             let gradeOption;
             if (i === parseInt(user.ownGrade)) {
                 gradeOption = `<option value=${i} selected>${i}</option>`
