@@ -1,10 +1,20 @@
 const { check, validationResult } = require('express-validator');
 const { comparePasswords } = require('../../utils');
-const express = require('express');
 const axios = require('axios');
-const loginPage = require('../../views/auth/login');
+const restricted = require('../../views/restriction');
 
 module.exports = {
+    // Validator for checking that the user is in fact an admin
+    checkIfAdmin: (req, res, next) => {
+        if (!req.session.user || req.session.user.role !== 0) {
+            res.send(restricted({ req, role: 'Admin' }));
+        }
+        else {
+            next();
+        }
+    },
+
+
     // Validators for creating a user
     // Checking if there already is a user for this e-mail address
     requireEmail: check('email')
@@ -36,7 +46,7 @@ module.exports = {
         }),
     // Checking that a role was selected
     requireRole: check('role')
-        .custom((role, { req }) => {
+        .custom((role) => {
             role = parseInt(role);
             console.log(role);
             if (isNaN(role)) {
@@ -46,6 +56,8 @@ module.exports = {
                 return true;
             }
         }),
+
+
     // Validators for logging in 
     // Checking that the e-mail is an e-mail address and not just some string
     requireValidEmail: check('email')
@@ -76,5 +88,49 @@ module.exports = {
                     throw new Error('Invalid password');
                 }
             }
-        })
+        }),
+
+    // Validators regarding the personal info of users
+    // Checking that a first name, last name, an address and a valid phone number were entered
+    requireFirstName: check('firstname')
+        .custom((firstname, role) => {
+            role = parseInt(role);
+            if (role !== 0 && firstname === '') {
+                throw new Error('Enter a first name');
+            }
+            else {
+                return true;
+            }
+        }),
+    requireLastName: check('lastname')
+        .custom((lastname, role) => {
+            role = parseInt(role);
+            if (role !== 0 && lastname === '') {
+                throw new Error('Enter a last name');
+            }
+            else {
+                return true;
+            }
+        }),
+    requireAddress: check('address')
+        .custom((address, role) => {
+            role = parseInt(role);
+            if (role !== 0 && address === '') {
+                throw new Error('Enter an address');
+            }
+            else {
+                return true;
+            }
+        }),
+    requirePhonenum: check('phonenum')
+        .trim()
+        .custom((phonenum, role) => {
+            role = parseInt(role);
+            if (role !== 0 && phonenum.length < 10) {
+                throw new Error('Enter a valid phone number');
+            }
+            else {
+                return true;
+            }
+        }),
 }

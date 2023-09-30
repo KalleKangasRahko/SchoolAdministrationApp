@@ -1,6 +1,17 @@
 const template = require('../template');
 
-module.exports = ({ req, user }) => {
+const getError = (errors, prop) => {
+    // We use try-catch to avoid writing a ton of if-statements
+    try {
+        // .mapped() turns errors-array into an object with objects with keys corresponding to the prop names
+        return errors.mapped()[prop].msg
+    }
+    catch (err) {
+        return '';
+    }
+};
+
+module.exports = ({ req, user, errors }) => {
     let role;
     switch (user.role) {
         case 0:
@@ -22,13 +33,17 @@ module.exports = ({ req, user }) => {
     if (user.role !== 0) {
         personalInfo = `
         <label>First name</label>
-            <input name="firstname" value="${user.firstname}"/>
+            <input name="firstname" value="${user.firstname}"/>            
+            ${getError(errors, 'firstname')}
         <label>Last name</label>
             <input name="lastname" value="${user.lastname}"/>
+            ${getError(errors, 'lastname')}
         <label>Address</label>
             <input name="address" value="${user.address}"/>
+            ${getError(errors, 'address')}
         <label>Phone number</label>
             <input name="phonenum" value="${user.phonenum}"/>
+            ${getError(errors, 'phonenum')}
         `
     }
 
@@ -71,8 +86,10 @@ module.exports = ({ req, user }) => {
         <form method="POST">
             <label>E-mail</label>
                 <input name="email" value="${user.email}"/>
+                ${getError(errors, 'email')}
             <label>Password</label>
                 <input name="password" type="password"/>
+                ${getError(errors, 'password')}
                 <select hidden name="role">
                     <option value="${user.role}" selected>${role}</option>
                 </select>

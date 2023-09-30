@@ -8,18 +8,13 @@ const addUserPage = require('../../views/admin/addUser');
 const editUserPage = require('../../views/admin/editUser');
 const editChildrenPage = require('../../views/admin/editChildren');
 const addChildrenPage = require('../../views/admin/addChildren');
-const { requireEmail, requirePassword, requirePasswordConfirmation, requireRole } = require('./validators');
+const { requireEmail, requireValidEmail, requirePassword, requirePasswordConfirmation, requireRole, requireFirstName, requireLastName, requireAddress, requirePhonenum } = require('./validators');
 
 // A table of all the users in the app
 router.get('/', async (req, res) => {
-    if (!req.session.user || req.session.user.role !== 0) {
-        res.send(restricted('Admin'));
-    }
-    else {
-        const result = await axios.get(`http://localhost:3000/api/users`);
-        const users = result.data.response;
-        res.send(usersPage({ req, users }));
-    }
+    const result = await axios.get(`http://localhost:3000/api/users`);
+    const users = result.data.response;
+    res.send(usersPage({ req, users }));
 });
 
 // Adding users
@@ -28,7 +23,14 @@ router.get('/adduser', async (req, res) => {
 });
 
 router.post('/adduser',
-    [requireEmail, requirePassword, requirePasswordConfirmation, requireRole],
+    [requireEmail,
+        requirePassword,
+        requirePasswordConfirmation,
+        requireRole,
+        requireFirstName,
+        requireLastName,
+        requireAddress,
+        requirePhonenum],
     async (req, res) => {
         try {
             const errors = validationResult(req);
@@ -65,24 +67,41 @@ router.get('/edit/:id', async (req, res) => {
     res.send(editUserPage({ req, user }));
 });
 
-router.post('/edit/:id', async (req, res) => {
-    const id = req.params.id;
-    const { email, password, role, firstname, lastname, address, phonenum, grade } = req.body;
-    console.log('Editing ' + id);
-    const user = {
-        email,
-        password,
-        role: parseInt(role),
-        firstname,
-        lastname,
-        address,
-        phonenum,
-        grade: parseInt(grade)
-    };
-    console.log(user);
-    await axios.put(`http://localhost:3000/api/users/${id}`, user);
-    res.redirect('/admin');
-});
+router.post('/edit/:id',
+    [requireValidEmail,
+        requireFirstName,
+        requireLastName,
+        requireAddress,
+        requirePhonenum],
+    async (req, res) => {
+        try {
+            const id = req.params.id;
+            const { email, password, role, firstname, lastname, address, phonenum, grade } = req.body;
+            const user = {
+                email,
+                password,
+                role: parseInt(role),
+                firstname,
+                lastname,
+                address,
+                phonenum,
+                grade: parseInt(grade)
+            };
+
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                console.log(errors);
+                return res.send(editUserPage({ req, user, errors }));
+            }
+            console.log('Editing ' + id);
+            console.log(user);
+            await axios.put(`http://localhost:3000/api/users/${id}`, user);
+            res.redirect('/admin');
+        }
+        catch (error) {
+            res.redirect('/admin');
+        }
+    });
 
 // Adding or removing children of a guardian
 router.get('/edit/children/:id', async (req, res) => {

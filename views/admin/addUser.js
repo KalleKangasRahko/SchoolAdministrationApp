@@ -1,4 +1,3 @@
-const { get } = require('../../src/routes/adminRoutes');
 const template = require('../template');
 
 const getError = (errors, prop) => {
@@ -47,7 +46,7 @@ module.exports = ({ req, errors }) => {
             </a>
         </div>
         <script>
-            const personalInfo = '<label>First name</label><input name="firstname"/><label>Last name</label><input name="lastname"/><label>Address</label><input name="address"/><label>Phone number</label><input name="phonenum"/>';
+            const personalInfo = '<label>First name</label><input name="firstname"/>${getError(errors, 'firstname')}<label>Last name</label><input name="lastname"/>${getError(errors, 'lastname')}<label>Address</label><input name="address"/>${getError(errors, 'address')}<label>Phone number</label><input name="phonenum"/>${getError(errors, 'phonenum')}';
             const grades = '<label>Grade</label><select name="grade"><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option><option value=6>6</option><option value=7>7</option><option value=8>8</option><option value=9>9</option></select>'
             const supervisor = '<label>Class supervisor for grade</label><select name="grade"><option value=0>None</option><option value=1>1</option><option value=2>2</option><option value=3>3</option><option value=4>4</option><option value=5>5</option><option value=6>6</option><option value=7>7</option><option value=8>8</option><option value=9>9</option></select>'
 

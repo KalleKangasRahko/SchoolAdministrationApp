@@ -1,12 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const { check, validationResult } = require('express-validator');
-const { comparePasswords } = require('../../utils');
+const { validationResult } = require('express-validator');
 const loginPage = require('../../views/auth/login');
 const loginFail = require('../../views/auth/loginFail');
 const loggedIn = require('../../views/auth/loggedIn');
-const { requireValidEmail, requirePassword, requireUser, requireCorrectPassword, requirePasswordExists} = require('./validators');
+const { requireValidEmail, requireUser, requireCorrectPassword, requirePasswordExists} = require('./validators');
 
 
 // The front page of the whole app, for logging in
