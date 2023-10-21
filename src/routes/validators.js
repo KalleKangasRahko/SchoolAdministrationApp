@@ -1,19 +1,8 @@
 const { check, validationResult } = require('express-validator');
 const { comparePasswords } = require('../../utils');
 const axios = require('axios');
-const restricted = require('../../views/restriction');
 
 module.exports = {
-    // Validator for checking that the user is in fact an admin
-    checkIfAdmin: (req, res, next) => {
-        if (!req.session.user || req.session.user.role !== 0) {
-            res.send(restricted({ req, role: 'Admin' }));
-        }
-        else {
-            next();
-        }
-    },
-
 
     // Validators for creating a user
     // Checking if there already is a user for this e-mail address
@@ -93,8 +82,8 @@ module.exports = {
     // Validators regarding the personal info of users
     // Checking that a first name, last name, an address and a valid phone number were entered
     requireFirstName: check('firstname')
-        .custom((firstname, role) => {
-            role = parseInt(role);
+        .custom((firstname, { req }) => {
+            role = parseInt(req.body.role);
             if (role !== 0 && firstname === '') {
                 throw new Error('Enter a first name');
             }
@@ -103,8 +92,8 @@ module.exports = {
             }
         }),
     requireLastName: check('lastname')
-        .custom((lastname, role) => {
-            role = parseInt(role);
+        .custom((lastname, { req }) => {
+            role = parseInt(req.body.role);
             if (role !== 0 && lastname === '') {
                 throw new Error('Enter a last name');
             }
@@ -113,8 +102,8 @@ module.exports = {
             }
         }),
     requireAddress: check('address')
-        .custom((address, role) => {
-            role = parseInt(role);
+        .custom((address, { req }) => {
+            role = parseInt(req.body.role);
             if (role !== 0 && address === '') {
                 throw new Error('Enter an address');
             }
@@ -124,8 +113,8 @@ module.exports = {
         }),
     requirePhonenum: check('phonenum')
         .trim()
-        .custom((phonenum, role) => {
-            role = parseInt(role);
+        .custom((phonenum, { req }) => {
+            role = parseInt(req.body.role);
             if (role !== 0 && phonenum.length < 10) {
                 throw new Error('Enter a valid phone number');
             }

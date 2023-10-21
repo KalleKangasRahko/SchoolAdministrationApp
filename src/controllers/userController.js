@@ -14,32 +14,7 @@ const userController = {
             // Generate a random 8 character id for the user
             const userId = crypto.randomBytes(4).toString('hex');
             const hashed = await cryptPassword(password);
-            /*
-            const user = {
-                id: userId,
-                email,
-                password: hashed,
-                role: parseInt(role),
-                firstname,
-                lastname,
-                address,
-                phonenum,
-                grade: parseInt(grade)
-            };
-            
-            if (user.role === 0) {
-                result = await Admin.create(user);
-            }
-            else if (user.role === 1) {
-                // create Teacher
-            }
-            else if (user.role === 2) {
-                result = await Guardian.create(user);
-            }
-            else if (user.role === 3) {
-                result = await Student.create(user);
-            }
-            */
+
             let result;
             let user;
             if (role === 0) {
@@ -156,24 +131,6 @@ const userController = {
 
             const result = user.remove();
 
-            /*
-            if (user.role === 0) {
-                result = await Admin.remove(user.id);
-            }
-            else if (user.role === 1) {
-                // create Teacher
-            }
-            else if (user.role === 2) {
-                result = await Guardian.remove(user.id);
-            }
-            else if (user.role === 3) {
-                result = await Student.remove(user.id);
-            }
-            else {
-                return res.status(400).json({ error: 'Invalid role' });
-            }
-            */
-
             res.status(201).json({ status: "OK", msg: "User removed", response: result });
         }
         catch (error) {
@@ -193,6 +150,16 @@ const userController = {
         }
     },
 
+    // Teacher-controller
+    async getAllTeachers(req, res) {
+        try {
+            const result = await Teacher.getAll();
+            res.json({ status: "OK", msg: "", response: result });
+        }
+        catch (error) {
+            res.status(500).json({ error });
+        }
+    },
 
     // Guardian-controller
     async getAllGuardians(req, res) {

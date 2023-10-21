@@ -10,7 +10,7 @@ const guardianRoutes = require('./src/routes/guardianRoutes');
 const studentRoutes = require('./src/routes/studentRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');
 
-const { checkIfAdmin } = require('./src/routes/validators');
+const { checkIfAdmin } = require('./src/routes/middlewares');
 
 const app = express();
 
@@ -23,7 +23,7 @@ app.use(cookieSession({
 app.use('/api', userRoutes);
 app.use('/api', parentChildRoutes)
 app.use(authRoutes);
-app.use('/admin', [checkIfAdmin], adminRoutes);
+app.use('/admin', adminRoutes);
 app.use('/student', studentRoutes);
 app.use('/guardian', guardianRoutes);
 app.use('/profiles', profileRoutes);
@@ -33,5 +33,3 @@ app.listen(3000, () => {
 });
 
 console.log("Let's get started.");
-
-// Password for admin@school.com: Kekkonen321

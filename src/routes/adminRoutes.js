@@ -1,8 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const axios = require('axios');
-const { check, validationResult } = require('express-validator');
-const restricted = require('../../views/restriction');
+const { validationResult } = require('express-validator');
 const usersPage = require('../../views/admin/usersTable');
 const addUserPage = require('../../views/admin/addUser');
 const editUserPage = require('../../views/admin/editUser');
@@ -94,7 +93,6 @@ router.post('/edit/:id',
                 return res.send(editUserPage({ req, user, errors }));
             }
             console.log('Editing ' + id);
-            console.log(user);
             await axios.put(`http://localhost:3000/api/users/${id}`, user);
             res.redirect('/admin');
         }

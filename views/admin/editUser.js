@@ -100,7 +100,7 @@ module.exports = ({ req, user, errors }) => {
         </form>
         ${childrenButton}
         <a href="/admin">
-            <button>Cancel</button>
+            <button>Back</button>
         </a>
     </div>
     `

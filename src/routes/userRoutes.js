@@ -3,6 +3,8 @@ const router = express.Router();
 
 const userController = require('../controllers/userController');
 
+// All the routes here are '.../api/something'
+
 // Routes for the generic User-class
 router.post('/users', userController.createUser);
 router.get('/users/:id', userController.getUserById);
@@ -13,6 +15,9 @@ router.delete('/users/:id', userController.removeUser);
 
 // Routes for admins
 router.get('/admins', userController.getAllAdmins);
+
+// Routes for teachers
+router.get('/teachers', userController.getAllTeachers);
 
 // Routes for guardians
 router.get('/guardians', userController.getAllGuardians);

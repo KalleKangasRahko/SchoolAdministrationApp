@@ -38,7 +38,7 @@ module.exports = ({ req, user }) => {
         </div>
         <div>
             <a href="/admin/edit/children/add/${user.id}"><button>Add children</button></a>
-            <a href="/admin/edit/${user.id}"><button>Cancel</button></a>
+            <a href="/admin/edit/${user.id}"><button>Back</button></a>
         </div>
         `
     }

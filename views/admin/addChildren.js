@@ -38,6 +38,6 @@ module.exports = ({ req, students, id }) => {
                 <select name="childId">${items}</select>
                 <button type="submit">Add as a child</button>
             </form>
-            <a href="/admin/edit/children/${id}"><button>Cancel</button>
+            <a href="/admin/edit/children/${id}"><button>Back</button>
         </div>`});
 }

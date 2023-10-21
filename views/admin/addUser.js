@@ -42,7 +42,7 @@ module.exports = ({ req, errors }) => {
                 <button type="submit">Add user</button>
             </form>
             <a href="/admin">
-                <button>Cancel</button>
+                <button>Back</button>
             </a>
         </div>
         <script>

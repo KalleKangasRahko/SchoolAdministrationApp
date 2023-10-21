@@ -13,7 +13,6 @@ class User {
     // Tested and works!
     // Get, by id, a user out of all the different users in the db
     static async getById(userId) {
-        return new Promise((resolve, reject) => {
             // This monster of a query allows us to get both the children of a parent and parents of a child with a single call
             const q = `SELECT u.id, u.role, u.firstname, u.lastname, u.email, u.address, u.phonenum, u.grade AS ownGrade,
                         pc2.parent AS parentId, pc1.child AS childId,
@@ -25,88 +24,68 @@ class User {
                         LEFT JOIN users p ON p.id = pc2.parent
                         WHERE u.id='${userId}'`;
             try {
-                db.query(q, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        console.log(result);
-                        resolve(result);
-                    }
-                });
+                await db.connect();
+                const result = await db.query(q);
+                return result;
             }
             catch (error) {
                 console.log(error);
-                reject(error);
             }
-        });
+            finally {
+                db.close();
+            }
     }
 
+    // Tested and works!
+    // Get a user by e-mail address. Used in the login.
     static async getByEmail(email) {
-        return new Promise((resolve, reject) => {
+        try {
+            await db.connect();
             const q = `SELECT * FROM users WHERE email='${email}'`;
-            try {
-                db.query(q, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        resolve(result[0]);
-                    }
-                });
-            }
-            catch (error) {
-                console.log(error);
-                reject(error);
-            }
-        });
+            const result = await db.query(q);
+            console.log(result[0]);
+            return result[0];
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            db.close();
+        }
     }
 
     // Tested and works!
     // Get all the different kinds of users in the db
     static async getAll() {
-        return new Promise((resolve, reject) => {
-            const q = `SELECT * FROM users`;
-            try {
-                db.query(q, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        resolve(result);
-                    }
-                });
-            }
-            catch (error) {
-                console.log(error);
-                reject(error);
-            }
-        });
+        try { 
+            await db.connect();
+            const q = 'SELECT * FROM users';
+            const result = await db.query(q);
+            //console.log(result);
+            return result;
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            db.close();
+        }
     }
 
+    // Tested and works!
     async remove() {
-        return new Promise((resolve, reject) => {
+        try {
+            await db.connect();
             const q = `DELETE FROM users WHERE id='${this.id}'`;
-            try {
-                db.query(q, (error, result) => {
-                    if (error) {
-                        console.log(error);
-                        reject(error);
-                    }
-                    else {
-                        console.log(result);
-                        resolve(result);
-                    }
-                })
-            }
-            catch (error) {
-                console.log(error);
-                reject(error);
-            }
-        });
+            const result = await db.query(q);
+            return result;
+        }
+        catch (error) {
+            console.log(error);
+        }
+        finally {
+            db.close();
+        }
     }
 }
 
