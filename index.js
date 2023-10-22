@@ -4,11 +4,13 @@ const cookieSession = require('cookie-session');
 
 const userRoutes = require('./src/routes/userRoutes');
 const parentChildRoutes = require('./src/routes/parentChildRoutes');
+const messageRoutes = require('./src/routes/messageRoutes');
 const authRoutes = require('./src/routes/authRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
 const guardianRoutes = require('./src/routes/guardianRoutes');
 const studentRoutes = require('./src/routes/studentRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');
+const inboxRoutes = require('./src/routes/inboxRoutes');
 
 const { checkIfAdmin } = require('./src/routes/middlewares');
 
@@ -21,12 +23,14 @@ app.use(cookieSession({
 }));
 
 app.use('/api', userRoutes);
-app.use('/api', parentChildRoutes)
+app.use('/api', parentChildRoutes);
+app.use('/api', messageRoutes);
 app.use(authRoutes);
-app.use('/admin', adminRoutes);
+app.use('/admin', [checkIfAdmin], adminRoutes);
 app.use('/student', studentRoutes);
 app.use('/guardian', guardianRoutes);
 app.use('/profiles', profileRoutes);
+app.use('/inbox', inboxRoutes);
 
 app.listen(3000, () => {
     console.log('Server running');

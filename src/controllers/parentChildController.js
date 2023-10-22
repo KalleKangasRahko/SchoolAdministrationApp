@@ -1,7 +1,7 @@
 const { ParentChild } = require('../models/parentChild');
 
 const parentChildController = {
-    async create(req, res) {
+    async createParentChild(req, res) {
         try {
             const { parentId, childId } = req.body;
             const parentChild = new ParentChild(parentId, childId);
@@ -13,7 +13,7 @@ const parentChildController = {
         }
     },
 
-    async remove(req, res) {
+    async removeParentChild(req, res) {
         try {
             const { parentId, childId } = req.body;
             const parentChild = new ParentChild(parentId, childId);

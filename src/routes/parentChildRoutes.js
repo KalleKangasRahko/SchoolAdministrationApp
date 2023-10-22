@@ -3,7 +3,7 @@ const router = express.Router();
 
 const parentChildController = require('../controllers/parentChildController');
 
-router.post('/parentchild/', parentChildController.create);
-router.post('/parentchild/sever', parentChildController.remove);
+router.post('/parentchild/', parentChildController.createParentChild);
+router.post('/parentchild/sever', parentChildController.removeParentChild);
 
 module.exports = router;

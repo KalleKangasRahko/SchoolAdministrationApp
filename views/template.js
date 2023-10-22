@@ -1,7 +1,8 @@
 module.exports = ({ req, content }) => {
     let userInfo;
     if (req.session.user) {
-        userInfo = `Logged in as ${req.session.user.firstname} ${req.session.user.lastname} <a href='/logout'>Log out</a>`
+        userInfo = `Logged in as ${req.session.user.firstname} ${req.session.user.lastname} <a href='/logout'>Log out</a>
+        <a href="/inbox/user/${req.session.user.id}">Messages</a>`
     }
     else {
         userInfo = '';

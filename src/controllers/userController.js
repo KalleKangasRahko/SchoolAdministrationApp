@@ -121,7 +121,6 @@ const userController = {
     async removeUser(req, res) {
         try {
             console.log('Removing ' + req.params.id);
-            //const user = JSON.parse(JSON.stringify(await User.getById(req.params.id)))[0];
             const user = new User(req.params.id);
             console.log(user);
 
