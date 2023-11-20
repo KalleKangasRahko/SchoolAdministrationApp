@@ -1,8 +1,20 @@
 module.exports = ({ req, content }) => {
+    const user = req.session.user;
+    let userData;
+    let timetables;
+
+    if (user && user.role === 0) {
+        userData = '<a href="/admin">Users</a>';
+    }
+    else {
+        userData = '';
+    }
+
     let userInfo;
+
     if (req.session.user) {
-        userInfo = `Logged in as ${req.session.user.firstname} ${req.session.user.lastname} <a href='/logout'>Log out</a>
-        <a href="/inbox/user/${req.session.user.id}">Messages</a>`
+        userInfo = `Logged in as ${user.firstname} ${user.lastname} <a href='/logout'>Log out</a>
+        ${userData} <a href="/inbox/user/${user.id}">Messages</a> <a href="/scheduling">Timetables</a>`
     }
     else {
         userInfo = '';

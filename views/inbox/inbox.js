@@ -2,6 +2,13 @@ const template = require('../template');
 
 module.exports = ({ req, messages }) => {
     const user = req.session.user;
+    
+    // Removing duplicate messages so each thread only shows up once
+    const threads = messages.map(( { thread }) => thread);
+    const filteredMessages = messages.filter(({ thread }, index) => 
+        !threads.includes(thread, index + 1));
+    messages = filteredMessages;
+    
     const messageList = messages.map(message => {
         let title;
         if (!message.opened) {
@@ -12,12 +19,12 @@ module.exports = ({ req, messages }) => {
         }
 
         return `
-                <tr>
-                    <td><a href="/inbox/message/${message.id}">${title}</a></td>
-                    <td><a href="/profiles/${message.senderId}">${message.sender}</td>
-                    <td>${message.timeAndDate}</td>
-                </tr>
-        `
+            <tr>
+                <td><a href="/inbox/thread/${message.thread}">${title}</a></td>
+                <td><a href="/profiles/${message.senderId}">${message.sender}</td>
+                <td>${message.timeAndDate}</td>
+            </tr>
+        `;
     })
     return template({
         req,

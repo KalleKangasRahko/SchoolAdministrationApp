@@ -1,4 +1,4 @@
-const template = require('../template');
+const template = require('./template');
 
 module.exports = ({ req }) => {
     const user = req.session.user;
@@ -6,7 +6,7 @@ module.exports = ({ req }) => {
         req,
         content: `
         <div>
-            Welcome student. You are logged in as ${user.firstname} ${user.lastname}, role ${user.role}
+            You are ${user.firstname} ${user.lastname}.
             </br>
             <a href="/logout">Log out</a>
         </div>

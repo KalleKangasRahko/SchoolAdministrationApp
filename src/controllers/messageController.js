@@ -4,10 +4,25 @@ const crypto = require('crypto');
 const messageController = {
     async saveMessage(req, res) {
         try {
-            const { title, content, senderId, receivers } = req.body;
-            const messageId = crypto.randomBytes(4).toString('hex');;
+            const { title, content, senderId, receivers, thread } = req.body;
+            // If this is the first message in a thread, create an id for the thread
+            // We create an array of threads (thread per receiver) so that same message being sent to
+            // several different receivers creates a separate thread for each receiver.
+            let threads = [];
+            if (!thread) {
+                for (let i = 0; i < receivers.length; i++) {
+                    const threadId = crypto.randomBytes(4).toString('hex');
+                    threads.push(threadId);
+                }
+            }
+            else {
+                threads = [thread];
+            }
+            const messageId = crypto.randomBytes(4).toString('hex');
+            // These four are needed for an instance of Message
             const message = new Message(messageId, title, content, senderId);
-            const result = await message.save(receivers);
+            // These two are needed for the messages_receivers-table
+            const result = await message.save(receivers, threads);
             res.status(201).json({ status: "OK", msg: "Message saved", response: result });
         }
         catch (error) {
@@ -28,6 +43,16 @@ const messageController = {
     async getMessageById(req, res) {
         try {
             const result = await Message.getById(req.params.messageid, req.params.userid);
+            res.json({ status: "OK", msg: "", response: result });
+        }
+        catch (error) {
+            res.status(500).json({ error });
+        }
+    },
+
+    async getMessageByThreadId(req, res) {
+        try {
+            const result = await Message.getByThreadId(req.params.id);
             res.json({ status: "OK", msg: "", response: result });
         }
         catch (error) {

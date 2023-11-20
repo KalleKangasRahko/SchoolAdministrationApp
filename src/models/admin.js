@@ -9,65 +9,83 @@ class Admin extends User {
 
     // Tested and works!
     async create() {
-        try {
-            await db.connect();
-            const q = `INSERT INTO users (ID, EMAIL, PASSWORD, ROLE) VALUES ('${this.id}', '${this.email}', '${this.password}', 0)`;
-            const result = await db.query(q);
-            console.log(result);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+        return new Promise((resolve, reject) => {
+            const q = 'INSERT INTO users (ID, EMAIL, PASSWORD, ROLE) VALUES (?, ?, ?, ?)';
+            try {
+                db.query(q, [this.id, this.email, this.password, 0],
+                    (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            reject(error);
+                        }
+                        else {
+                            console.log(result);
+                            resolve(result);
+                        }
+                    });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 
     // Tested and works!
     static async getAll() {
-        try {
-            await db.connect();
+        return new Promise((resolve, reject) => {
             const q = 'SELECT * FROM users WHERE role=0';
-            const result = await db.query(q);
-            console.log(result);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 
     // Tested and works!
     async update() {
-        // The password is changed only if a new one is supplied
-        // Otherwise the password simply be reset to empty and you'd have to supply the old password every time the user is edited
-        let password;
-        if (this.password !== '') {
-            password = `, password='${this.password}'`
-        }
-        else {
-            password = '';
-        }
-
-        try {
-            await db.connect();
+        return new Promise((resolve, reject) => {
+            // The password is changed only if a new one is supplied
+            // Otherwise the password simply be reset to empty and you'd have to supply the old password every time the user is edited
+            let password;
+            if (this.password !== '') {
+                password = `, password='${this.password}'`
+            }
+            else {
+                password = '';
+            }
             const q = `UPDATE users SET email='${this.email}'
                         ${password}
                         WHERE id='${this.id}'`;
-            const result = await db.query(q);
-            console.log(result);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 }
 

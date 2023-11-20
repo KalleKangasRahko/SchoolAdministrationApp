@@ -47,7 +47,7 @@ module.exports = ({ req, users }) => {
             </thead>
                 ${renderedUsers}
             </table>
-            <a href="/admin/adduser">Add a user</a>
+            <a href="/admin/adduser"><button>Add a user</button></a>
         </div>
     `
     }

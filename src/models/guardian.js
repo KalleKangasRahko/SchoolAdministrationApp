@@ -11,67 +11,86 @@ class Guardian extends User {
 
     // Tested and works!
     async create() {
-        try {
-            await db.connect();
-            const q = `INSERT INTO users (ID, EMAIL, PASSWORD, ROLE, FIRSTNAME, LASTNAME, ADDRESS, PHONENUM) 
-                        VALUES ('${this.id}', '${this.email}', '${this.password}', 2, '${this.firstname}', '${this.lastname}', 
-                        '${this.address}', '${this.phonenum}')`;
-            const result = await db.query(q);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+        return new Promise((resolve, reject) => {
+            const q = 'INSERT INTO users (ID, EMAIL, PASSWORD, ROLE, FIRSTNAME, LASTNAME, ADDRESS, PHONENUM) VALUES (?, ?, ?, ?, ?, ?, ?, ?)';
+            try {
+                db.query(q, [this.id, this.email, this.password, 2, this.firstname, this.lastname, this.address, this.phonenum],
+                    (error, result) => {
+                        if (error) {
+                            console.log(error);
+                            reject(error);
+                        }
+                        else {
+                            console.log(result);
+                            resolve(result);
+                        }
+                    });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 
     // Tested and works!
     static async getAll() {
-        try {
-            await db.connect();
+        return new Promise((resolve, reject) => {
             const q = 'SELECT * FROM users WHERE role=2';
-            const result = await db.query(q);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                })
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 
     // Tested and works!
     async update() {
-        // The password is changed only if a new one is supplied
-        // Otherwise the password simply be reset to empty and you'd have to supply the old password every time the user is edited
-        let password;
-        if (this.password !== '') {
-            password = `password='${this.password}',`
-        }
-        else {
-            password = '';
-        }
-        try {
-            await db.connect();
+        return new Promise((resolve, reject) => {
+            // The password is changed only if a new one is supplied
+            let password;
+            if (this.password !== '') {
+                password = `password='${this.password}',`
+            }
+            else {
+                password = '';
+            }
             const q = `UPDATE users SET email='${this.email}',
-                            ${password}
-                            firstname='${this.firstname}', 
-                            lastname='${this.lastname}',
-                            address='${this.address}',
-                            phonenum='${this.phonenum}'
-                            WHERE id='${this.id}'`;
-            const result = await db.query(q);
-            return result;
-        }
-        catch (error) {
-            console.log(error);
-        }
-        finally {
-            db.close();
-        }
+                        ${password}
+                        firstname='${this.firstname}', 
+                        lastname='${this.lastname}',
+                        address='${this.address}',
+                        phonenum='${this.phonenum}'
+                        WHERE id='${this.id}'`;
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                console.log(error);
+                reject(error);
+            }
+        });
     }
 }
 

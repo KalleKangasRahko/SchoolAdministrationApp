@@ -2,6 +2,8 @@ const { check, validationResult } = require('express-validator');
 const { comparePasswords } = require('../../utils');
 const axios = require('axios');
 
+const { getRoom } = require('../../utils');
+
 module.exports = {
 
     // Validators for creating a user
@@ -122,4 +124,49 @@ module.exports = {
                 return true;
             }
         }),
+
+    // Validators for timetables
+    // Checking that both the teacher and the classroom are available at required time so that we can avoid double-bookings
+    requireTeacherAndClassroomAvailability: check('classes')
+        .custom(async (classes) => {
+            const givenClasses = JSON.parse(classes);
+            const result = await axios.get('http://localhost:3000/api/classes');
+            if (result.data.response) {
+                const queriedClasses = result.data.response;
+                for (let i = 0; i < givenClasses.length; i++) {
+                    for (let j = 0; j < queriedClasses.length; j++) {
+                        // The class only has the timetable-key IF it has been created before and is now edited
+                        // So if it does, we need to make sure it is the same value as the timetable of the queried class
+                        // Meaning: teacher being booked at this time is only an issue if it is in a different timetable
+                        // Otherwise we wouldn't be able to edit the timetable at all because the existing classes would cause
+                        // the teacher to be considered booked at any given time
+                        if (givenClasses[i].timetable) {
+                            if (givenClasses[i].slot === queriedClasses[j].slot && givenClasses[i].teacher === queriedClasses[j].teacher && givenClasses[i].timetable !== queriedClasses[j].timetable) {
+                                throw new Error(`${queriedClasses[j].teacherName} is already taken in slot ${givenClasses[i].slot}`);
+                            }
+                        }
+                        else {
+                            if (givenClasses[i].slot === queriedClasses[j].slot && givenClasses[i].teacher === queriedClasses[j].teacher) {
+                                throw new Error(`${queriedClasses[j].teacherName} is already taken in slot ${givenClasses[i].slot}`);
+                            }
+                        }
+                    }
+                }
+                for (let i = 0; i < givenClasses.length; i++) {
+                    // Ditto with the classroom. The classroom being booked is only an issue if it is in a different timetable
+                    for (let j = 0; j < queriedClasses.length; j++) {
+                        if (givenClasses[i].timetable) {
+                            if (givenClasses[i].slot === queriedClasses[j].slot && givenClasses[i].room === queriedClasses[j].room && givenClasses[i].timetable !== queriedClasses[j].timetable) {
+                                throw new Error(`${getRoom(queriedClasses[j].room)} is already taken in slot ${givenClasses[i].slot}`);
+                            }
+                        }
+                        else {
+                            if (givenClasses[i].slot === queriedClasses[j].slot && givenClasses[i].room === queriedClasses[j].room) {
+                                throw new Error(`${getRoom(queriedClasses[j].room)} is already taken in slot ${givenClasses[i].slot}`);
+                            }
+                        }
+                    }
+                }
+            }
+        })
 }

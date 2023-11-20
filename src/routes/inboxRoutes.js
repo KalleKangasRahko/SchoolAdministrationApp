@@ -3,8 +3,8 @@ const router = express.Router();
 const axios = require('axios');
 
 const inboxPage = require('../../views/inbox/inbox');
-const readMessagePage = require('../../views/inbox/readMessagePage');
-const composePage = require('../../views/inbox/composePage');
+const readMessagePage = require('../../views/inbox/readMessage');
+const composePage = require('../../views/inbox/compose');
 
 // Inbox of the current user
 router.get('/user/:id', async (req, res) => {
@@ -36,6 +36,22 @@ router.get('/message/:id', async (req, res) => {
     res.send(readMessagePage({ req, message }));
 });
 
+// Show all the messages in a thread
+router.get('/thread/:id', async (req, res) => {
+    const id = req.params.id;
+    const result = await axios.get(`http://localhost:3000/api/messages/thread/${id}`);
+    const messages = result.data.response;
+
+    for (let message of messages) {
+        if (!message.opened && message.senderId !== req.session.user.id) {
+            console.log('Reading for the first time!');
+            const read = await axios.get(`http://localhost:3000/api/messages/read/${message.mrId}`);
+            console.log(read);
+        }
+    }
+    res.send(readMessagePage({ req, messages }));
+});
+
 // Write a new message
 router.get('/compose', async (req, res) => {
     const result = await axios.get('http://localhost:3000/api/users');
@@ -46,7 +62,7 @@ router.get('/compose', async (req, res) => {
 router.post('/compose', async (req, res) => {
     try {
         console.log(req.body);
-        const { senderId, receivers, title, content } = req.body;
+        const { senderId, receivers, title, content, thread } = req.body;
         let message;
 
         // Have to make sure there is an array of receivers, even if there is just one item in it
@@ -57,7 +73,8 @@ router.post('/compose', async (req, res) => {
                 senderId,
                 receivers: receiversArray,
                 title,
-                content
+                content,
+                thread
             };
         }
         else {
@@ -65,7 +82,8 @@ router.post('/compose', async (req, res) => {
                 senderId,
                 receivers,
                 title,
-                content
+                content,
+                thread
             };
         }
         console.log(message);

@@ -2,15 +2,19 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cookieSession = require('cookie-session');
 
-const userRoutes = require('./src/routes/userRoutes');
-const parentChildRoutes = require('./src/routes/parentChildRoutes');
-const messageRoutes = require('./src/routes/messageRoutes');
+// Api-routes
+const userRoutes = require('./src/routes/apiRoutes/userRoutes');
+const parentChildRoutes = require('./src/routes/apiRoutes/parentChildRoutes');
+const messageRoutes = require('./src/routes/apiRoutes/messageRoutes');
+const classRoutes = require('./src/routes/apiRoutes/classRoutes');
+const timetableRoutes = require('./src/routes/apiRoutes/timetableRoutes');
+
+// Other routes
 const authRoutes = require('./src/routes/authRoutes');
 const adminRoutes = require('./src/routes/adminRoutes');
-const guardianRoutes = require('./src/routes/guardianRoutes');
-const studentRoutes = require('./src/routes/studentRoutes');
 const profileRoutes = require('./src/routes/profileRoutes');
 const inboxRoutes = require('./src/routes/inboxRoutes');
+const schedulingRoutes = require('./src/routes/schedulingRoutes');
 
 const { checkIfAdmin } = require('./src/routes/middlewares');
 
@@ -22,15 +26,19 @@ app.use(cookieSession({
     keys: ['8iw-,{YH8XboU}-6s[#3&ar4Z7Wg[@o{qNkNDI5nPaU4D92&;!{J=-(6lbMN6Emp']
 }));
 
+// Api-routes:
 app.use('/api', userRoutes);
 app.use('/api', parentChildRoutes);
 app.use('/api', messageRoutes);
+app.use('/api', classRoutes);
+app.use('/api', timetableRoutes);
+
+// Other routes
 app.use(authRoutes);
 app.use('/admin', [checkIfAdmin], adminRoutes);
-app.use('/student', studentRoutes);
-app.use('/guardian', guardianRoutes);
 app.use('/profiles', profileRoutes);
 app.use('/inbox', inboxRoutes);
+app.use('/scheduling', schedulingRoutes);
 
 app.listen(3000, () => {
     console.log('Server running');

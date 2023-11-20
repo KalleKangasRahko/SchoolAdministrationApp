@@ -5,13 +5,14 @@ const { validationResult } = require('express-validator');
 const loginPage = require('../../views/auth/login');
 const loginFail = require('../../views/auth/loginFail');
 const loggedIn = require('../../views/auth/loggedIn');
+const dashboard = require('../../views/dashboard');
 const { requireValidEmail, requireUser, requireCorrectPassword, requirePasswordExists} = require('./validators');
 
 
 // The front page of the whole app, for logging in
 router.get('/', async (req, res) => {
     if (req.session.user) {
-        res.send(loggedIn({ req }));
+        res.redirect('/dashboard');
     }
     else {
         res.send(loginPage({ req }));
@@ -40,13 +41,13 @@ router.post('/',
                 res.redirect('/admin');
             }
             else if (req.session.user.role === 1) {
-                // Redirect to the teacher-dashboard
+                res.redirect('/dashboard');
             }
             else if (req.session.user.role === 2) {
-                res.redirect('/guardian');
+                res.redirect('/dashboard');
             }
             else if (req.session.user.role === 3) {
-                res.redirect('/student');
+                res.redirect('/dashboard');
             }
 
         }
@@ -65,7 +66,7 @@ router.get('/logout', async (req, res) => {
 });
 
 router.get('/dashboard', async (req, res) => {
-    res.send(dashboard(req.session.user));
+    res.send(dashboard({ req }))
 });
 
 module.exports = router;
