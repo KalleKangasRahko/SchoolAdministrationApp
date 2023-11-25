@@ -33,10 +33,10 @@ const timetableController = {
 
     async updateTable(req, res) {
         try {
-            // TODO: make sure a tableId is supplied...
-            const { id, author, classes } = req.body;
+            const { id, author, oldClasses, newClasses } = req.body;
+            console.log('id:' + id);
             const timetable = new Timetable(id, author);
-            const result = await timetable.update(classes);
+            const result = await timetable.update(oldClasses, newClasses);
             res.status(201).json({ status: "OK", msg: "Timetable updated", response: result });
         }
         catch (error) {

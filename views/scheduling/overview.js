@@ -36,14 +36,17 @@ module.exports = ({ req, personalTable }) => {
             // Then we draw a timetable based on that array
             const drawnTable = drawTimetable(classes);
             // First we add a header
-            table = table + `<br />Timetable of ${name}<br/>`;
+            table = table + `<br /><h3>Timetable of ${name}</h3><br/>`;
             // Then we add that table into our HTML-string
             table = table + drawnTable;
         }
     }
+    else if (req.session.user.role === 0) {
+        header = '';
+    }
     else {
         table = drawTimetable(personalTable);
-        header = `Timetable of ${req.session.user.firstname} ${req.session.user.lastname}`;
+        header = `<h3>Timetable of ${req.session.user.firstname} ${req.session.user.lastname}</h3>`;
     }
 
     return template({

@@ -32,6 +32,26 @@ const classController = {
         }
     },
 
+    async getClassByGrade(req, res) {
+        try {
+            const result = await Class.getByGrade(req.params.grade);
+            res.json({ status: "OK", msg: "", response: result });
+        }
+        catch (error) {
+            res.status(500).json({ error });
+        }
+    },
+
+    async getClassForNotes(req, res) {
+        try {
+            const result = await Class.getForNotes(req.params.grade);
+            res.json({ status: "OK", msg: "", response: result });
+        }
+        catch (error) {
+            res.status(500).json({ error });
+        }
+    },
+
     async getClassByTimetable(req, res) {
         try {
             const result = await Class.getByTimetable(req.params.id);

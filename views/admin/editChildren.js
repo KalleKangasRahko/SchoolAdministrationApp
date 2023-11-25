@@ -6,7 +6,7 @@ module.exports = ({ req, user }) => {
 
     const items = userArray.map(item => {
         return `<tr>
-                    <td><a href="/profiles/${item.childId}">${item.child}</a></td>
+                    <td><a href="/profiles/user/${item.childId}">${item.child}</a></td>
                     <td>${item.grade}</td>
                     <td>
                         <form method="POST">

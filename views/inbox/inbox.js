@@ -25,11 +25,11 @@ module.exports = ({ req, messages }) => {
                 <td>${message.timeAndDate}</td>
             </tr>
         `;
-    })
+    }).join('');
     return template({
         req,
         content: `
-        <div>Messages for ${user.firstname}</div>
+        <div><h3>Messages for ${user.firstname}<h3></div>
         <div><a href="/inbox/compose">Write a new message</a></div>
         <div>
             <table>

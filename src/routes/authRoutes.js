@@ -8,6 +8,7 @@ const loggedIn = require('../../views/auth/loggedIn');
 const dashboard = require('../../views/dashboard');
 const { requireValidEmail, requireUser, requireCorrectPassword, requirePasswordExists} = require('./validators');
 
+// Authorization routes. For logging in and logging out.
 
 // The front page of the whole app, for logging in
 router.get('/', async (req, res) => {
@@ -20,6 +21,8 @@ router.get('/', async (req, res) => {
 });
 
 // Post-route for logging in
+// The obvious weakness here is that we have to call the database three (3) times every time we try to log in
+// So.... todo: fix that
 router.post('/',
     // First we check that the e-mail and password are valid, format-wise
     [requireValidEmail, requirePasswordExists, requireUser, requireCorrectPassword],

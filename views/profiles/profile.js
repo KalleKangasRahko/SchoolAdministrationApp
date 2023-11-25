@@ -31,7 +31,7 @@ module.exports = ({ req, user }) => {
     // If the user is a guardian, show their children
     if (user.role === 2 && user.childId !== null) {
         const items = userArray.map(item => {
-            return `<li><a href="/profiles/${item.childId}">${item.child}</a>, grade ${item.grade}</li>`;
+            return `<li><a href="/profiles/user/${item.childId}">${item.child}</a>, grade ${item.grade}</li>`;
         }).join('');
 
         children = `<h4>Children</h4>
@@ -48,7 +48,7 @@ module.exports = ({ req, user }) => {
     if (user.role === 3) {
         grade = `<li>Grade ${user.ownGrade}</li>`
         const items = userArray.map(item => {
-            return `<li><a href="/profiles/${item.parentId}">${item.parent}</a></li>`
+            return `<li><a href="/profiles/user/${item.parentId}">${item.parent}</a></li>`
         }).join('');
 
         guardians = `<h4>Guardians</h4>
@@ -71,9 +71,6 @@ module.exports = ({ req, user }) => {
             </ul>
             ${children}
             ${guardians}
-        </div>
-        <div>
-            <a href="/admin">Back to the list</a>
         </div>
     `
     }

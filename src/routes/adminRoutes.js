@@ -9,6 +9,9 @@ const editChildrenPage = require('../../views/admin/editChildren');
 const addChildrenPage = require('../../views/admin/addChildren');
 const { requireEmail, requireValidEmail, requirePassword, requirePasswordConfirmation, requireRole, requireFirstName, requireLastName, requireAddress, requirePhonenum } = require('./validators');
 
+// Routes for admins
+// Creating, editing, and removing users. Connecting parents with their children. User management.
+
 // A table of all the users in the app
 router.get('/', async (req, res) => {
     const result = await axios.get(`http://localhost:3000/api/users`);

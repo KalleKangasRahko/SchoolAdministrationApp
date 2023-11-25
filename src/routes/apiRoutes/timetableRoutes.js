@@ -6,6 +6,6 @@ const timetableController = require('../../controllers/timetableController');
 router.get('/timetables', timetableController.getAllTimetables);
 router.post('/timetables', timetableController.createTimetable);
 router.post('/timetables/assign/:id', timetableController.assignGrade);
-router.put('/timetables/:id', timetableController.updateTable);
+router.put('/timetables/edit/', timetableController.updateTable);
 
 module.exports = router;

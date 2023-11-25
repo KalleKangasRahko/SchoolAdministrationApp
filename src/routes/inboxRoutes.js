@@ -6,8 +6,14 @@ const inboxPage = require('../../views/inbox/inbox');
 const readMessagePage = require('../../views/inbox/readMessage');
 const composePage = require('../../views/inbox/compose');
 
+const restricted = require('../../views/restriction');
+
+const { checkIfCorrectUser } = require('./middlewares');
+
+// Inbox routes. Reading and writing messages.
+
 // Inbox of the current user
-router.get('/user/:id', async (req, res) => {
+router.get('/user/:id', [checkIfCorrectUser], async (req, res) => {
     const id = req.params.id;
     const result = await axios.get(`http://localhost:3000/api/messages/${id}`);
     const messages = result.data.response;
@@ -45,8 +51,7 @@ router.get('/thread/:id', async (req, res) => {
     for (let message of messages) {
         if (!message.opened && message.senderId !== req.session.user.id) {
             console.log('Reading for the first time!');
-            const read = await axios.get(`http://localhost:3000/api/messages/read/${message.mrId}`);
-            console.log(read);
+            await axios.get(`http://localhost:3000/api/messages/read/${message.mrId}`);
         }
     }
     res.send(readMessagePage({ req, messages }));

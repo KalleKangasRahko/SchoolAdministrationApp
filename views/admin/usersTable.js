@@ -21,7 +21,7 @@ module.exports = ({ req, users }) => {
             return `<tr>
                         <td>${user.id}</td>
                         <td>${user.email}</td>
-                        <td><a href='/profiles/${user.id}'>${user.firstname} ${user.lastname}</a></td>
+                        <td><a href='/profiles/user/${user.id}'>${user.firstname} ${user.lastname}</a></td>
                         <td>${role}</td>
                         <td>
                             <a href='/admin/edit/${user.id}'>

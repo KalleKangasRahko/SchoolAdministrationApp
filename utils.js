@@ -24,14 +24,90 @@ const comparePasswords = async (saved, supplied) => {
 }
 
 const getSubject = (i) => {
-    const subjects = ['Finnish', 'Mathematics', 'Environmental studies', 'Arts', 'Crafts', 'Music', 'Physical education', 'English', 'Swedish',
-        'Biology', 'Geography', 'Social studies', 'Health education', 'Woodworking', 'Metalworking', 'Textile working', 'History', 'Religion'];
+    const subjects = ['Finnish', 'Mathematics', 'Environmental studies', 'Arts', 'Crafts', 'Music', 
+                        'Physical education', 'English', 'Swedish', 'Biology', 'Geography', 'Social studies', 
+                        'Health education', 'Woodworking', 'Metalworking', 'Textile working', 'History', 'Religion',
+                        'Physics', 'Chemistry', "Home Economics"];
     return subjects[i - 1];
 }
 
+const getSubjectShort = (i) => {
+    const subjects = ['-', 'FIN', 'MATH', 'ENV', 'ART', 'CRFT', 'MU', 'PE', 'ENG', 'SWE', 'BIO', 'GEO', 'SOC', 'HE', 'WOOD', 'MTL', 'TXTL', 'HIS', 'REL', 'PHY', 'CHEM', "HEC"];
+    return subjects[i];
+}
+
 const getRoom = (i) => {
-    const classrooms = ['Room 11', 'Room 12', 'Room 13', 'Room 14', 'Room 15', 'Room 21', 'Room 22', 'Room 23', 'Room 24', 'Room 25', 'Arts', 'Crafts', 'Woodshop', 'Metalshop', 'Music room', 'Gym'];
+    const classrooms = ['Room 11', 'Room 12', 'Room 13', 'Room 14', 'Room 15', 'Room 21', 'Room 22', 'Room 23', 'Room 24', 'Room 25', 'Arts', 'Crafts', 'Woodshop', 'Metalshop', 'Music room', 'Gym', 'Lab', 'Kitchen'];
     return classrooms[i - 1];
+}
+
+const getTimeBySlot = (slot) => {
+    let time;
+    switch (slot) {
+        case 1:
+        case 8:
+        case 15:
+        case 22:
+        case 29:
+            time = '08:00-08:45';
+            break;
+        case 2:
+        case 9:
+        case 16:
+        case 23:
+        case 30:
+            time = '09:00-09:45';
+            break;
+        case 3:
+        case 10:
+        case 17:
+        case 24:
+        case 31:
+            time = '10:00-10:45';
+            break;
+        case 4:
+        case 11:
+        case 18:
+        case 25:
+        case 32:
+            time = '11:15-12:00';
+            break;
+        case 5:
+        case 12:
+        case 19:
+        case 26:
+        case 33:
+            time = '12:15-13:00';
+            break;
+        case 6:
+        case 13:
+        case 20:
+        case 27:
+        case 34:
+            time = '13:15-14:00';
+            break;
+        case 7:
+        case 14:
+        case 21:
+        case 28:
+        case 35:
+            time = '14:15-15:00';
+            break;
+    }
+    return time;
+}
+
+const getNote = (i) => {
+    const notes = [
+        { reason: 'No note', color: 'white' },
+        { reason: 'Absent, no clearance', color: 'yellow' },
+        { reason: 'Absent, clearance', color: 'cyan' },
+        { reason: 'Late for class', color: 'orange' },
+        { reason: 'Homework not done', color: 'blueviolet' },
+        { reason: 'Misbehaviour', color: 'red' },
+        { reason: 'Excellent work', color: 'green' }
+    ]
+    return notes[i];
 }
 
 const drawTimetable = (classes) => {
@@ -92,5 +168,5 @@ const drawTimetable = (classes) => {
 }
 
 module.exports = {
-    cryptPassword, comparePasswords, getSubject, getRoom, drawTimetable
+    cryptPassword, comparePasswords, getSubject, getSubjectShort, getRoom, getNote, getTimeBySlot, drawTimetable
 }

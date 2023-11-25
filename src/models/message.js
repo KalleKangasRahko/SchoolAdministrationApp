@@ -120,7 +120,7 @@ class Message {
     static async getByThreadId(threadId) {
         return new Promise((resolve, reject) => {
             const q = `SELECT mr.id as mrId, m.id, m.title, m.content, m.senderId, CONCAT(u.firstname, ' ', u.lastname) AS sender, 
-                        m.timeAndDate, mr.thread FROM messages m 
+                        m.timeAndDate, mr.opened, mr.thread, mr.receiverId FROM messages m 
                         LEFT JOIN messages_receivers mr ON m.id = mr.messageId 
                         LEFT JOIN users u ON m.senderId = u.id WHERE mr.thread='${threadId}'
                         ORDER BY m.timeAndDate`;

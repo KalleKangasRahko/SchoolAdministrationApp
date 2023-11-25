@@ -91,6 +91,9 @@ module.exports = ({ req, teachers, errors, classes, tableId }) => {
                     <option value=16>Textile working</option>
                     <option value=17>History</option>
                     <option value=18>Religion</option>
+                    <option value=19>Physics</option>
+                    <option value=20>Chemistry</option>
+                    <option value=21>Home economics</option>
                 </select>
                 <br />
                 <label>Classroom</label>
@@ -112,6 +115,8 @@ module.exports = ({ req, teachers, errors, classes, tableId }) => {
                     <option value=14>Metalshop</option>
                     <option value=15>Music room</option>
                     <option value=16>Gym</option>
+                    <option value=17>Lab</option>
+                    <option value=18>Kitchen</option>
                 </select>
                 <br />
                 ${getError(errors, 'classes')}
@@ -231,14 +236,14 @@ module.exports = ({ req, teachers, errors, classes, tableId }) => {
             <!-- Getting the name of the subject by number -->
             const getSubject = (i) => {
                 const subjects = ['Finnish', 'Mathematics', 'Environmental studies', 'Arts', 'Crafts', 'Music', 'Physical education', 'English', 'Swedish', 
-                                'Biology', 'Geography', 'Social studies', 'Health education', 'Woodworking', 'Metalworking', 'Textile working', 'History', 'Religion'];
+                                'Biology', 'Geography', 'Social studies', 'Health education', 'Woodworking', 'Metalworking', 'Textile working', 'History', 'Religion', 'Physics', 'Chemisty', 'Home economics'];
                 return subjects[i-1];
             }
 
             <!-- Getting the name of the classroom by number -->
             const getRoom = (i) => {
                 const classrooms = ['Room 11', 'Room 12', 'Room 13', 'Room 14', 'Room 15', 'Room 21', 'Room 22', 'Room 23', 'Room 24', 
-                                'Room 25', 'Arts', 'Crafts', 'Woodshop', 'Metalshop', 'Music room', 'Gym'];
+                                'Room 25', 'Arts', 'Crafts', 'Woodshop', 'Metalshop', 'Music room', 'Gym', 'Lab', 'Kitchen'];
                 return classrooms[i - 1];
             }
 

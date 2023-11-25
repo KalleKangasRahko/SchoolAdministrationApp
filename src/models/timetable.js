@@ -62,9 +62,10 @@ class Timetable {
     // Assigning a grade for a timetable. First it clear the other timetable for the same grade and substitutes the new one
     async assignGrade(grade) {
         return new Promise((resolve, reject) => {
-            const q = `UDPDATE timetables SET grade=0 WHERE grade=${grade}; 
+            const q = `UPDATE timetables SET grade=0 WHERE grade=${grade}; 
                         UPDATE timetables SET grade=${grade} WHERE id='${this.id}'`;
-            console.log(q); 
+            console.log(q);
+            // This btw is the only time in the app where we use multiple statements in one query
             try {
                 db.query(q, (error, result) => {
                     if (error) {
@@ -86,24 +87,27 @@ class Timetable {
 
     // Updating a timetable. This just updates the edited- and author- (last editor) columns
     // The classes are then updated in a separate method, which, however, is tied to this one
-    async update(classes) {
+    async update(oldClasses, newClasses) {
         return new Promise((resolve, reject) => {
             const q = `UPDATE timetables SET edited=now(), author='${this.author}' WHERE id='${this.id}'`;
             console.log(q);
             try {
                 db.query(q, (error, result) => {
-                        if (error) {
-                            console.log(error);
-                            reject(error);
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        for (let lesson of oldClasses) {
+                            this.updateLesson(lesson);
                         }
-                        else {
-                            console.log(result);
-                            for (let lesson of classes) {
-                                this.updateLesson(lesson);
-                            }
-                            resolve(result);
+                        for (let lesson of newClasses) {
+                            this.saveLesson(lesson);
                         }
-                    });
+                        resolve(result);
+                    }
+                });
             }
             catch (error) {
                 console.log(error);
@@ -122,15 +126,15 @@ class Timetable {
             console.log(q);
             try {
                 db.query(q, (error, result) => {
-                        if (error) {
-                            console.log(error);
-                            reject(error);
-                        }
-                        else {
-                            console.log(result);
-                            resolve(result);
-                        }
-                    });
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
             }
             catch (error) {
                 console.log(error);

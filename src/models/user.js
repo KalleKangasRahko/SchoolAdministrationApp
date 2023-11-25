@@ -70,7 +70,7 @@ class User {
     // Get all the different kinds of users in the db
     static async getAll() {
         return new Promise((resolve, reject) => {
-            const q = `SELECT * FROM users`;
+            const q = `SELECT * FROM users ORDER BY role, lastname`;
             try {
                 db.query(q, (error, result) => {
                     if (error) {

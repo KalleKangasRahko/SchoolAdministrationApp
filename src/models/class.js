@@ -92,6 +92,61 @@ class Class {
         });
     }
 
+    static async getByGrade(grade) {
+        return new Promise((resolve, reject) => {
+            const q = `SELECT c.slot, c.teacher, c.subject, c.room, c.teacher, CONCAT(u1.firstname, ' ', u1.lastname) AS teacherName 
+                        FROM classes c LEFT JOIN users u1 ON c.teacher = u1.id 
+                        LEFT JOIN timetables t ON t.id = c.timetable
+                        LEFT JOIN users u2 ON t.grade = u2.grade WHERE t.grade=${grade}
+                        ORDER BY slot`;
+            console.log(q);
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                reject(error);
+                console.log(error);
+            }
+        });
+    }
+
+    // Gets the timetable of a grade, for adding notes
+    // Also returns a list of all the students in the grade...
+    static async getForNotes(grade) {
+        return new Promise((resolve, reject) => {
+            const q = `SELECT u.id as studentId, CONCAT(u.lastname, ', ', u.firstname) AS studentName, c.slot AS classSlot, c.subject,
+                        n.id as noteId, n.date, n.slot AS noteSlot, n.reason FROM classes c LEFT JOIN timetables t ON c.timetable = t.id 
+                        CROSS JOIN users u ON u.grade=t.grade LEFT JOIN notes n ON n.student=u.id
+                        WHERE t.grade=${grade} AND u.role=3 ORDER BY lastname, c.slot`
+            console.log(q);
+            try {
+                db.query(q, (error, result) => {
+                    if (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+                    else {
+                        console.log(result);
+                        resolve(result);
+                    }
+                });
+            }
+            catch (error) {
+                reject(error);
+                console.log(error);
+            }
+        });
+    }
+
     // Gets the classes in a timetable for viewing the timetable without any particular caveats
     static async getByTimetable(tableId) {
         return new Promise((resolve, reject) => {
@@ -123,7 +178,7 @@ class Class {
         return new Promise((resolve, reject) => {
             const q = `SELECT c.id, c.timetable, c.slot, c.subject, c.room, c.teacher, CONCAT(u1.firstname, ' ', u1.lastname) as teacherName, 
             u2.id AS dbTeacherId, CONCAT(u2.firstname, ' ', u2.lastname) as dbTeacherName FROM classes c LEFT JOIN users u1 
-            ON c.teacher=u1.id cross JOIN users u2 WHERE c.timetable='${tableId}' AND u2.role=1 ORDER BY c.slot`;
+            ON c.teacher=u1.id CROSS JOIN users u2 WHERE c.timetable='${tableId}' AND u2.role=1 ORDER BY c.slot`;
             console.log(q);
             try {
                 db.query(q, (error, result) => {
