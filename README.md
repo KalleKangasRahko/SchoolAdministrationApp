@@ -22,6 +22,7 @@ A few credentials:
 Admin: admin@school.com, password: Kekkonen321
 Teachers: hellin.laukkanen@school.com, reino.reiska@school.com and kerttu-liisa.koskinen@school.com
 Guardians: petrus.potkonen@gmail.com, mirja.mantyla@gmail.com
+Students: pontus.potkonen@gmail.com, alfred.mantyla@gmail.com
 
 All the passwords, expect for the admin, are firstname with a capital first letter and 123. So: Hellin123, Reino123, Petrus123 and so forth.
 Feel free to click around, create users, create timetables, send messages and add notes.
@@ -33,4 +34,7 @@ As of 25.11.2023 this project is severely unfinished, and will receive updates a
 2) Search for KalleKangasRahko/SchoolAdministrationApp, and choose it as it pops up. Choose a folder where you wish to clone the repository.
 3) Once the repository is cloned, open up HeidiSQL, and log in to your SQL-server. Choose File => Load SQL file and choose the schooldb.sql-file from the project folder
 4) Once the database has been imported, go to src => db.js and change the credentials in the file to match your SQL-server
-5) Enjoy
+5) Open your terminal / command prompt, and navigate to the same folder where you cloned the repository using the command cd
+6) Type npm run dev, and press enter
+7) Open your browser, and navigate to http://localhost:3000
+8) Enjoy
